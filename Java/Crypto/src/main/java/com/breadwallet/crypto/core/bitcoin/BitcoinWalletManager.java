@@ -2,6 +2,7 @@ package com.breadwallet.crypto.core.bitcoin;
 
 import com.breadwallet.crypto.api.Account;
 import com.breadwallet.crypto.api.Network;
+import com.breadwallet.crypto.api.WalletManager;
 import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
@@ -16,17 +17,19 @@ import com.breadwallet.crypto.core.common.CommonWalletManager;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executor;
 
-// TODO: It would be nice to have this exposed via a factory since the ctors are all the same
+// TODO: Add parameter validation
+// TODO: Review visibility (for class, methods, fields, etc.)
+// TODO: Consider exposing this via a registered factory
 public final class BitcoinWalletManager
-        extends CommonWalletManager implements CoreBitcoinWalletManagerClient {
+        extends CommonWalletManager implements WalletManager, CoreBitcoinWalletManagerClient {
 
-    private final WeakReference<BitcoinWalletManagerListener> listener;
-    private final CoreBitcoinWalletManager coreWalletManager;
-    private final CoreBitcoinPeerManager corePeerManager;
-    private final CoreBitcoinWallet coreWallet;
+    protected final WeakReference<BitcoinWalletManagerListener> listener;
+    protected final CoreBitcoinWalletManager coreWalletManager;
+    protected final CoreBitcoinPeerManager corePeerManager;
+    protected final CoreBitcoinWallet coreWallet;
 
-    private final BitcoinPersistenceClient persistenceClient;
-    private final BitcoinBackendClient backendClient;
+    protected final BitcoinPersistenceClient persistenceClient;
+    protected final BitcoinBackendClient backendClient;
 
     public BitcoinWalletManager(BitcoinWalletManagerListener listener,
                                 Account account,
@@ -74,7 +77,6 @@ public final class BitcoinWalletManager
 
     @Override
     public void handleTransactionEvent() {
-        // TODO: implement me
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
@@ -85,7 +87,6 @@ public final class BitcoinWalletManager
 
     @Override
     public void handleWalletEvent() {
-        // TODO: implement me
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
@@ -96,7 +97,6 @@ public final class BitcoinWalletManager
 
     @Override
     public void handleWalletManagerEvent() {
-        // TODO: implement me
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {

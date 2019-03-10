@@ -2,12 +2,13 @@ package com.breadwallet.crypto.core.bitcoin.jni;
 
 import com.breadwallet.crypto.core.common.jni.JniReference;
 
+// TODO: Review visibility (for class, methods, fields, etc.)
 public class CoreBitcoinChainParams
         extends JniReference {
 
-    public static CoreBitcoinChainParams TESTNET = new CoreBitcoinChainParams(getTestnetParams());
+    public static CoreBitcoinChainParams TESTNET = new CoreBitcoinChainParams(createTestnetChainParams());
 
-    private static native long getTestnetParams();
+    private static native long createTestnetChainParams();
 
     protected CoreBitcoinChainParams(long jniReferenceAddress) {
         super(jniReferenceAddress);

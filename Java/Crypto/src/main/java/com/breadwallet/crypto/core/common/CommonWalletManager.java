@@ -7,6 +7,8 @@ import com.breadwallet.crypto.api.WalletManager;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// TODO: Add parameter validation
+// TODO: Review visibility (for class, methods, fields, etc.)
 public abstract class CommonWalletManager implements WalletManager {
 
     protected static Executor DEFAULT_EXECUTOR = Executors.newSingleThreadExecutor();
@@ -19,14 +21,6 @@ public abstract class CommonWalletManager implements WalletManager {
     protected final Executor listenerExecutor;
 
     protected State state;
-
-    public CommonWalletManager(Account account,
-                               Network network,
-                               Mode mode,
-                               long earliestKeyTime,
-                               String storagePath) {
-        this(DEFAULT_EXECUTOR, account, network, mode, earliestKeyTime, storagePath);
-    }
 
     public CommonWalletManager(Executor listenerExecutor,
                                Account account,

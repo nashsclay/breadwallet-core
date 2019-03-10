@@ -4,13 +4,19 @@ import com.breadwallet.crypto.core.common.jni.JniReference;
 
 import java.lang.ref.WeakReference;
 
-public class CoreBitcoinWalletManager
-        extends JniReference implements CoreBitcoinWalletManagerClient {
+// TODO: Add parameter validation
+// TODO: Hook up listener callbacks
+// TODO: Review visibility (for class, methods, fields, etc.)
+public class CoreBitcoinWalletManager extends JniReference {
+
+    private static native void initializeNative();
 
     private static native long createBitcoinWalletManager(CoreBitcoinMasterPubKey mpk,
                                                           CoreBitcoinChainParams params,
                                                           int earliestKeyTime,
                                                           String storagePath);
+
+    static { initializeNative(); }
 
     private final WeakReference<CoreBitcoinWalletManagerClient> client;
 
@@ -30,29 +36,5 @@ public class CoreBitcoinWalletManager
 
     public native void connect();
 
-    // CoreBitcoinWalletManagerClient
-
-    @Override
-    public void handleTransactionEvent() {
-        CoreBitcoinWalletManagerClient c = client.get();
-        if (null != c) {
-            c.handleTransactionEvent();
-        }
-    }
-
-    @Override
-    public void handleWalletEvent() {
-        CoreBitcoinWalletManagerClient c = client.get();
-        if (null != c) {
-            c.handleWalletEvent();
-        }
-    }
-
-    @Override
-    public void handleWalletManagerEvent() {
-        CoreBitcoinWalletManagerClient c = client.get();
-        if (null != c) {
-            c.handleWalletManagerEvent();
-        }
-    }
+    protected native void disposeNative();
 }

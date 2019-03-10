@@ -64,6 +64,8 @@ target_sources (crypto
                 src/main/cpp/core/BRTransaction.h
                 src/main/cpp/core/BRWallet.c
                 src/main/cpp/core/BRWallet.h
+                src/main/cpp/core/BRWalletManager.c
+                src/main/cpp/core/BRWalletManager.h
 
                 src/main/cpp/core/support/BRFileService.c
                 src/main/cpp/core/support/BRFileService.h
@@ -229,7 +231,25 @@ target_sources (crypto
 
 # Crypto JNI
 target_sources (crypto
-                PUBLIC)
+                PUBLIC
+                src/main/cpp/jni/BRCryptoJni.h
+                src/main/cpp/jni/BRCryptoJni.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinChainParams.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinChainParams.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinPeerManager.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinPeerManager.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWallet.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWallet.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManagerClient.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManagerClient.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_common_jni_JniReference.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_common_jni_JniReference.c
+                src/main/cpp/jni/com_breadwallet_crypto_core_jni_Bip39.h
+                src/main/cpp/jni/com_breadwallet_crypto_core_jni_Bip39.c)
 
 include_directories(src/main/cpp/core/)
 include_directories(src/main/cpp/core/ethereum/)
