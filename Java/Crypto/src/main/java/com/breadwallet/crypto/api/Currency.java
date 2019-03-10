@@ -1,4 +1,4 @@
-package com.breadwallet.crypto;
+package com.breadwallet.crypto.api;
 
 public class Currency {
     public final String code;

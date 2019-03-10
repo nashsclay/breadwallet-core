@@ -1,4 +1,4 @@
-package com.breadwallet.crypto;
+package com.breadwallet.crypto.api;
 
 import java.math.BigInteger;
 

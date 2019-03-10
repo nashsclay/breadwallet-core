@@ -1,10 +1,10 @@
-package com.breadwallet.crypto.ethereum;
+package com.breadwallet.crypto.api.ethereum;
 
-import com.breadwallet.crypto.Amount;
-import com.breadwallet.crypto.Currency;
-import com.breadwallet.crypto.WalletManager;
+import com.breadwallet.crypto.api.Amount;
+import com.breadwallet.crypto.api.Currency;
+import com.breadwallet.crypto.api.WalletManager;
 
-public class Wallet extends com.breadwallet.crypto.Wallet {
+public class Wallet extends com.breadwallet.crypto.api.Wallet {
     long core;
 
     /// Balance

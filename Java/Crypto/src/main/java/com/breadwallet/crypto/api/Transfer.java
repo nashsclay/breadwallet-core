@@ -1,4 +1,4 @@
-package com.breadwallet.crypto;
+package com.breadwallet.crypto.api;
 
 public abstract class Transfer {
     public Wallet wallet;

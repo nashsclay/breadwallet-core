@@ -1,8 +1,8 @@
-package com.breadwallet.crypto.ethereum;
+package com.breadwallet.crypto.api.ethereum;
 
-import com.breadwallet.crypto.Currency;
-import com.breadwallet.crypto.Network;
-import com.breadwallet.crypto.Unit;
+import com.breadwallet.crypto.api.Currency;
+import com.breadwallet.crypto.api.Network;
+import com.breadwallet.crypto.api.Unit;
 
 public interface Ethereum {
     Currency currency = new Currency ("ETH", "Ξ", "Ethereum", 18, "WEI", "wei");

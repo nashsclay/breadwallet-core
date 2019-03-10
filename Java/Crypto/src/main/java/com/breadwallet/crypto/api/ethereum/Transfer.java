@@ -1,10 +1,10 @@
-package com.breadwallet.crypto.ethereum;
+package com.breadwallet.crypto.api.ethereum;
 
-import com.breadwallet.crypto.Address;
-import com.breadwallet.crypto.Amount;
-import com.breadwallet.crypto.Wallet;
+import com.breadwallet.crypto.api.Address;
+import com.breadwallet.crypto.api.Amount;
+import com.breadwallet.crypto.api.Wallet;
 
-class Transfer extends com.breadwallet.crypto.Transfer {
+class Transfer extends com.breadwallet.crypto.api.Transfer {
     long core;
 
     private Transfer(long core, Wallet wallet, Address source, Address target, Amount amount, Amount fee) {
