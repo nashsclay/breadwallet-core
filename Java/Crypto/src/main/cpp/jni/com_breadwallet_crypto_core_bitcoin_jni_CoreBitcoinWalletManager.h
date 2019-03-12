@@ -9,35 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
- * Method:    initializeNative
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_initializeNative
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
  * Method:    createBitcoinWalletManager
  * Signature: (Lcom/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinMasterPubKey;Lcom/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinChainParams;ILjava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_createBitcoinWalletManager
   (JNIEnv *, jclass, jobject, jobject, jint, jstring);
-
-/*
- * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
- * Method:    getPeerManager
- * Signature: ()Lcom/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinPeerManager;
- */
-JNIEXPORT jobject JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_getPeerManager
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
- * Method:    getWallet
- * Signature: ()Lcom/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinWallet;
- */
-JNIEXPORT jobject JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_getWallet
-  (JNIEnv *, jobject);
 
 /*
  * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager

@@ -1,7 +1,6 @@
 package com.breadwallet.crypto.core.common.jni;
 
 // TODO: Review visibility (for class, methods, fields, etc.)
-// TODO: Add concept of owned (to handle case like CoreBitcoinWalletManager::getPeerManager()
 public class JniReference {
 
     protected static boolean SHOW_FINALIZE = false;

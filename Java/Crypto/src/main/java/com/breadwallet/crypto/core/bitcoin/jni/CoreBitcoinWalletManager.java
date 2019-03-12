@@ -9,14 +9,10 @@ import java.lang.ref.WeakReference;
 // TODO: Review visibility (for class, methods, fields, etc.)
 public class CoreBitcoinWalletManager extends JniReference {
 
-    private static native void initializeNative();
-
     private static native long createBitcoinWalletManager(CoreBitcoinMasterPubKey mpk,
                                                           CoreBitcoinChainParams params,
                                                           int earliestKeyTime,
                                                           String storagePath);
-
-    static { initializeNative(); }
 
     private final WeakReference<CoreBitcoinWalletManagerClient> client;
 
@@ -29,10 +25,6 @@ public class CoreBitcoinWalletManager extends JniReference {
         this.client = new WeakReference<>(client);
         this.jniReferenceAddress = createBitcoinWalletManager(mpk, params, earliestKeyTime, storagePath);
     }
-
-    public native CoreBitcoinPeerManager getPeerManager();
-
-    public native CoreBitcoinWallet getWallet();
 
     public native void connect();
 

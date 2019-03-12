@@ -238,10 +238,6 @@ target_sources (crypto
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinChainParams.c
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey.h
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey.c
-                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinPeerManager.h
-                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinPeerManager.c
-                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWallet.h
-                src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWallet.c
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.h
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.c
                 src/main/cpp/jni/com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManagerClient.h

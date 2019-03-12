@@ -30,14 +30,6 @@
 // TODO: Add defensive checks on inputs
 // TODO: Wire in callbacks to Java layer
 // TODO: Re-write using personal coding style
-// TODO: Return borrowed CoreBitcoinWallet in getWallet()
-// TODO: Return borrowed CoreBitcoinPeerManager in getPeerManager()
-
-static jclass peerManagerClass;
-static jmethodID peerManagerConstructor;
-
-static jclass walletClass;
-static jmethodID walletConstructor;
 
 static void
 transactionEventCallback (BRWalletManager manager,
@@ -53,25 +45,6 @@ walletEventCallback (BRWalletManager manager,
 static void
 walletManagerEventCallback (BRWalletManager manager,
                             BRWalletManagerEvent event);
-
-JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_initializeNative (
-        JNIEnv * env,
-        jclass thisClass)
-{
-    peerManagerClass = (*env)->FindClass(env, "com/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinPeerManager");
-    assert (NULL != peerManagerClass);
-    peerManagerClass = (*env)->NewGlobalRef (env, peerManagerClass);
-
-    peerManagerConstructor = (*env)->GetMethodID(env, peerManagerClass, "<init>", "(J)V");
-    assert (NULL != peerManagerConstructor);
-
-    walletClass = (*env)->FindClass(env, "com/breadwallet/crypto/core/bitcoin/jni/CoreBitcoinWallet");
-    assert (NULL != walletClass);
-    walletClass = (*env)->NewGlobalRef (env, walletClass);
-
-    walletConstructor = (*env)->GetMethodID(env, walletClass, "<init>", "(J)V");
-    assert (NULL != walletConstructor);
-}
 
 JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_createBitcoinWalletManager (
         JNIEnv * env,
@@ -91,24 +64,6 @@ JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoin
     assert (walletManager);
 
     return (jlong) walletManager;
-}
-
-JNIEXPORT jobject JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_getPeerManager (
-        JNIEnv * env,
-        jobject thisObject)
-{
-    BRWalletManager *walletManager = (BRWalletManager *) getJNIReference(env, thisObject);
-    BRPeerManager *peerManager = BRWalletManagerGetPeerManager(walletManager);
-    return (*env)->NewObject (env, peerManagerClass, peerManagerConstructor, (jlong) peerManager);
-}
-
-JNIEXPORT jobject JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_getWallet (
-        JNIEnv * env,
-        jobject thisObject)
-{
-    BRWalletManager *walletManager = (BRWalletManager *) getJNIReference(env, thisObject);
-    BRWallet *wallet= BRWalletManagerGetPeerManager(walletManager);
-    return (*env)->NewObject (env, walletClass, walletConstructor, (jlong) wallet);
 }
 
 JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_connect (

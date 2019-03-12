@@ -8,8 +8,6 @@ import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinChainParams;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinMasterPubKey;
-import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinPeerManager;
-import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWallet;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWalletManager;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWalletManagerClient;
 import com.breadwallet.crypto.core.common.CommonWalletManager;
@@ -25,8 +23,6 @@ public final class BitcoinWalletManager
 
     protected final WeakReference<BitcoinWalletManagerListener> listener;
     protected final CoreBitcoinWalletManager coreWalletManager;
-    protected final CoreBitcoinPeerManager corePeerManager;
-    protected final CoreBitcoinWallet coreWallet;
 
     protected final BitcoinPersistenceClient persistenceClient;
     protected final BitcoinBackendClient backendClient;
@@ -61,8 +57,6 @@ public final class BitcoinWalletManager
 
         this.listener = new WeakReference<>(listener);
         this.coreWalletManager = new CoreBitcoinWalletManager(this, masterPubKey, chainParams, earliestKeyTime, storagePath);
-        this.corePeerManager = coreWalletManager.getPeerManager();
-        this.coreWallet = coreWalletManager.getWallet();
     }
 
     // WalletManager
@@ -70,7 +64,6 @@ public final class BitcoinWalletManager
     @Override
     public void connect() {
         coreWalletManager.connect();
-        corePeerManager.connect();
     }
 
     // CoreWalletManagerClient

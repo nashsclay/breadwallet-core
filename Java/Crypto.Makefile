@@ -36,8 +36,6 @@ JAVA_SRCS=$(JAVA_SDIR)/api/bitcoin/BitcoinBackendClient.java \
 	$(JAVA_SDIR)/api/WalletManagerPersistenceClient.java \
 	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinChainParams.java \
 	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinMasterPubKey.java \
-	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinPeerManager.java \
-	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinWallet.java \
 	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinWalletManager.java \
 	$(JAVA_SDIR)/core/bitcoin/jni/CoreBitcoinWalletManagerClient.java \
 	$(JAVA_SDIR)/core/bitcoin/BitcoinChainParams.java \

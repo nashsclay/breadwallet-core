@@ -27,7 +27,6 @@
 
 // TODO: Add defensive checks on inputs
 // TODO: Re-write using personal coding style
-// TODO: Add concept of owned (to handle case like CoreBitcoinWalletManager::getPeerManager()
 
 #define JNI_REFERENCE_ADDRESS_FIELD_NAME "jniReferenceAddress"
 #define JNI_REFERENCE_ADDRESS_FIELD_TYPE "J" // long
