@@ -10,7 +10,7 @@ public class CoreBitcoinChainParams
 
     private static native long createTestnetChainParams();
 
-    protected CoreBitcoinChainParams(long jniReferenceAddress) {
+    private CoreBitcoinChainParams(long jniReferenceAddress) {
         super(jniReferenceAddress);
     }
 }

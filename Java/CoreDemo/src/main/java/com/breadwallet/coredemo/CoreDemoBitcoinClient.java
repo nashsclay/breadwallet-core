@@ -1,6 +1,10 @@
 package com.breadwallet.coredemo;
 
+import android.util.Log;
+
 import com.breadwallet.crypto.api.Network;
+import com.breadwallet.crypto.api.Transfer;
+import com.breadwallet.crypto.api.Wallet;
 import com.breadwallet.crypto.api.WalletManager;
 import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
@@ -16,6 +20,8 @@ import java.util.Map;
 
 public class CoreDemoBitcoinClient
         implements BitcoinWalletManagerListener, BitcoinBackendClient, BitcoinPersistenceClient {
+
+    private static final String TAG = "CoreDemoBitcoinClient";
 
     static { CoreCrypto.init(); }
 
@@ -37,28 +43,32 @@ public class CoreDemoBitcoinClient
         walletManager.connect();
     }
 
+    public void disconnect() {
+        walletManager.disconnect();
+    }
+
     // BitcoinWalletManagerListener
 
     @Override
     public void handleManagerEvent(WalletManager manager, WalletManagerEvent event) {
-
+        Log.d(TAG, "handleManagerEvent: " + event.toString());
     }
 
     @Override
-    public void handleTransferEvent(WalletManager manager, TransferEvent event) {
-
+    public void handleTransferEvent(WalletManager manager, Wallet wallet, Transfer transfer, TransferEvent event) {
+        Log.d(TAG, "handleTransferEvent: " + event.toString());
     }
 
     @Override
-    public void handleWalletEvent(WalletManager manager, WalletEvent event) {
-
+    public void handleWalletEvent(WalletManager manager, Wallet wallet, WalletEvent event) {
+        Log.d(TAG, "handleWalletEvent: " + event.toString());
     }
 
     // BitcoinBackendClient
 
     @Override
     public boolean isReachable() {
-        return false;
+        return true;
     }
 
     // BitcoinPersistenceClient

@@ -7,4 +7,6 @@ public interface WalletManager {
     enum State { CREATED, DISCONNECTED, CONNECTED, SYNCING, DELETED }
 
     void connect();
+
+    void disconnect();
 }

@@ -20,11 +20,6 @@ public class JniReference {
         this.jniReferenceAddress = jniReferenceAddress;
     }
 
-    protected JniReference ()
-    {
-        this.jniReferenceAddress = 0;
-    }
-
     protected void finalize() throws Throwable {
         if (SHOW_FINALIZE) System.err.println("Finalize: " + toString());
         dispose();

@@ -20,16 +20,33 @@
 //  THE SOFTWARE.
 
 #include <stdlib.h>
+#include <android/log.h>
 #include <assert.h>
+#include <BRWalletManager.h>
 
 #include "BRWalletManager.h"
 
 #include "BRCryptoJni.h"
 #include "com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.h"
 
+#define  LOG_TAG "CoreBitcoinWalletManager"
+
 // TODO: Add defensive checks on inputs
-// TODO: Wire in callbacks to Java layer
 // TODO: Re-write using personal coding style
+
+static jclass trampolineClass = NULL;
+static jmethodID trampolineHandleTransactionAdded = NULL;
+static jmethodID trampolineHandleTransactionUpdated = NULL;
+static jmethodID trampolineHandleTransactionDeleted = NULL;
+
+static jmethodID trampolineHandleWalletCreated = NULL;
+static jmethodID trampolineHandleWalletBalanceUpdated = NULL;
+static jmethodID trampolineHandleWalletDeleted = NULL;
+
+static jmethodID trampolineHandleWalletManagerConnected = NULL;
+static jmethodID trampolineHandleWalletManagerDisconnected = NULL;
+static jmethodID trampolineHandleWalletManagerSyncStarted = NULL;
+static jmethodID trampolineHandleWalletManagerSyncStopped = NULL;
 
 static void
 transactionEventCallback (BRWalletManager manager,
@@ -45,6 +62,30 @@ walletEventCallback (BRWalletManager manager,
 static void
 walletManagerEventCallback (BRWalletManager manager,
                             BRWalletManagerEvent event);
+
+static jmethodID
+trampolineOrFatal (JNIEnv *env, const char *name, const char *signature);
+
+JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_initializeNative (
+        JNIEnv * env,
+        jclass thisClass)
+{
+    if (NULL != trampolineClass) return;
+    trampolineClass = (*env)->NewGlobalRef(env, thisClass);
+
+    trampolineHandleTransactionAdded       = trampolineOrFatal (env, "handleTransactionAdded",             "(JJJ)V");
+    trampolineHandleTransactionUpdated     = trampolineOrFatal (env, "handleTransactionUpdated",           "(JJJ)V");
+    trampolineHandleTransactionDeleted     = trampolineOrFatal (env, "handleTransactionDeleted",           "(JJJ)V");
+
+    trampolineHandleWalletCreated          = trampolineOrFatal (env, "handleWalletCreated",                "(JJ)V");
+    trampolineHandleWalletBalanceUpdated   = trampolineOrFatal (env, "handleWalletBalanceUpdated",         "(JJJ)V");
+    trampolineHandleWalletDeleted          = trampolineOrFatal (env, "handleWalletDeleted",                "(JJ)V");
+
+    trampolineHandleWalletManagerConnected    = trampolineOrFatal (env, "handleWalletManagerConnected",    "(J)V");
+    trampolineHandleWalletManagerDisconnected = trampolineOrFatal (env, "handleWalletManagerDisconnected", "(J)V");
+    trampolineHandleWalletManagerSyncStarted  = trampolineOrFatal (env, "handleWalletManagerSyncStarted",  "(J)V");
+    trampolineHandleWalletManagerSyncStopped  = trampolineOrFatal (env, "handleWalletManagerSyncStopped",  "(JI)V");
+}
 
 JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_createBitcoinWalletManager (
         JNIEnv * env,
@@ -74,6 +115,14 @@ JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinW
     BRWalletManagerConnect(walletManager);
 }
 
+JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_disconnect (
+        JNIEnv * env,
+        jobject thisObject)
+{
+    BRWalletManager *walletManager = (BRWalletManager *) getJNIReference(env, thisObject);
+    BRWalletManagerDisconnect(walletManager);
+}
+
 JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_disposeNative (
         JNIEnv * env,
         jobject thisObject)
@@ -82,23 +131,81 @@ JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinW
     if (NULL != walletManager) BRWalletManagerFree(walletManager);
 }
 
+
+static jmethodID
+trampolineOrFatal (JNIEnv *env, const char *name, const char *signature) {
+    jmethodID method = (*env)->GetStaticMethodID (env, trampolineClass, name, signature);
+    assert (NULL != method);
+    return method;
+}
+
+
 static void
-transactionEventCallback (BRWalletManager manager,
-                          BRWallet *wallet,
-                          BRTransaction *transaction,
-                          BRTransactionEvent event) {
-    printf ("TST: TransactionEvent: %d\n", event.type);
+transactionEventCallback (BRWalletManager wmid,
+                          BRWallet *wid,
+                          BRTransaction *tid,
+                          BRTransactionEvent e) {
+    JNIEnv *env = getEnv();
+    if (NULL == env) return;
+
+    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "TransactionEvent: %d\n", e.type);
+
+    switch (e.type) {
+        case BITCOIN_TRANSACTION_ADDED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleTransactionAdded, (jlong) wmid, (jlong) wid, (jlong) tid);
+            break;
+        case BITCOIN_TRANSACTION_UPDATED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleTransactionUpdated, (jlong) wmid, (jlong) wid, (jlong) tid);
+            break;
+        case BITCOIN_TRANSACTION_DELETED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleTransactionDeleted, (jlong) wmid, (jlong) wid, (jlong) tid);
+            break;
+    }
+
 }
 
 static void
-walletEventCallback (BRWalletManager manager,
-                     BRWallet *wallet,
-                     BRWalletEvent event) {
-    printf ("TST: WalletEvent: %d\n", event.type);
+walletEventCallback (BRWalletManager wmid,
+                     BRWallet *wid,
+                     BRWalletEvent e) {
+    JNIEnv *env = getEnv();
+    if (NULL == env) return;
+
+    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "WalletEvent: %d\n", e.type);
+
+    switch (e.type) {
+        case BITCOIN_WALLET_CREATED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletCreated, (jlong) wmid, (jlong) wid);
+            break;
+        case BITCOIN_WALLET_BALANCE_UPDATED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletBalanceUpdated, (jlong) wmid, (jlong) wid, (jlong) e.u.balance.satoshi);
+            break;
+        case BITCOIN_WALLET_DELETED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletDeleted, (jlong) wmid, (jlong) wid);
+            break;
+    }
 }
 
 static void
-walletManagerEventCallback (BRWalletManager manager,
-                            BRWalletManagerEvent event) {
-    printf ("TST: WalletManagerEvent: %d\n", event.type);
+walletManagerEventCallback (BRWalletManager wmid,
+                            BRWalletManagerEvent e) {
+    JNIEnv *env = getEnv();
+    if (NULL == env) return;
+
+    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "WalletManagerEvent: %d\n", e.type);
+
+    switch (e.type) {
+        case BITCOIN_WALLET_MANAGER_CONNECTED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletManagerConnected, (jlong) wmid);
+            break;
+        case BITCOIN_WALLET_MANAGER_DISCONNECTED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletManagerDisconnected, (jlong) wmid);
+            break;
+        case BITCOIN_WALLET_MANAGER_SYNC_STARTED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletManagerSyncStarted, (jlong) wmid);
+            break;
+        case BITCOIN_WALLET_MANAGER_SYNC_STOPPED:
+            (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletManagerSyncStopped, (jlong) wmid, (jint) e.u.syncStopped.error);
+            break;
+    }
 }

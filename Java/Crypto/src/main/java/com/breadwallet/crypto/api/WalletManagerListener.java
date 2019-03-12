@@ -8,7 +8,7 @@ public interface WalletManagerListener {
 
     void handleManagerEvent(WalletManager manager, WalletManagerEvent event);
 
-    void handleTransferEvent(WalletManager manager, TransferEvent event);
+    void handleTransferEvent(WalletManager manager, Wallet wallet, Transfer transfer, TransferEvent event);
 
-    void handleWalletEvent(WalletManager manager, WalletEvent event);
+    void handleWalletEvent(WalletManager manager, Wallet wallet, WalletEvent event);
 }

@@ -27,7 +27,14 @@ JAVA_SRCS=$(JAVA_SDIR)/api/bitcoin/BitcoinBackendClient.java \
 	$(JAVA_SDIR)/api/bitcoin/BitcoinWalletManagerListener.java \
 	$(JAVA_SDIR)/api/event/TransferEvent.java \
 	$(JAVA_SDIR)/api/event/WalletEvent.java \
+	$(JAVA_SDIR)/api/event/WalletEventBalanceUpdated.java \
+	$(JAVA_SDIR)/api/event/WalletEventCreated.java \
+	$(JAVA_SDIR)/api/event/WalletEventDeleted.java \
 	$(JAVA_SDIR)/api/event/WalletManagerEvent.java \
+	$(JAVA_SDIR)/api/event/WalletManagerEventConnected.java \
+	$(JAVA_SDIR)/api/event/WalletManagerEventDisconnected.java \
+	$(JAVA_SDIR)/api/event/WalletManagerEventSyncStarted.java \
+	$(JAVA_SDIR)/api/event/WalletManagerEventSyncStopped.java \
 	$(JAVA_SDIR)/api/Account.java \
 	$(JAVA_SDIR)/api/Network.java \
 	$(JAVA_SDIR)/api/WalletManager.java \

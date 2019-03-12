@@ -17,10 +17,26 @@ JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoin
 
 /*
  * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
+ * Method:    initializeNative
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_initializeNative
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
  * Method:    connect
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_connect
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager
+ * Method:    disconnect
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager_disconnect
   (JNIEnv *, jobject);
 
 /*

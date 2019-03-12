@@ -13,7 +13,7 @@ public class CoreBitcoinMasterPubKey
         this(createBitcoinMasterPubKey(seed));
     }
 
-    protected CoreBitcoinMasterPubKey(long jniReferenceAddress) {
+    private CoreBitcoinMasterPubKey(long jniReferenceAddress) {
         super(jniReferenceAddress);
     }
 }

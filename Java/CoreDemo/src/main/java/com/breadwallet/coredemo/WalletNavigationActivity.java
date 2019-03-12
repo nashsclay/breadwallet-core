@@ -10,7 +10,6 @@ import java.io.File;
 
 public class WalletNavigationActivity extends AppCompatActivity {
 
-    CoreDemoBitcoinClient btcClient = null;
     CoreDemoEthereumClient ethClient = null;
 
     private void deleteRecursively (File file) {
@@ -32,11 +31,12 @@ public class WalletNavigationActivity extends AppCompatActivity {
             if (storageFile.exists()) deleteRecursively(storageFile);
             storageFile.mkdirs();
 
-            btcClient = new CoreDemoBitcoinClient(BitcoinNetworks.TESTNET,
+            CoreDemoBitcoinClient btcClient = new CoreDemoBitcoinClient(BitcoinNetworks.TESTNET,
                     storageFile.getAbsolutePath(),
-                    "boring head harsh green empty clip fatal typical found crane dinner timber");
+                    "0xa9de3dbd7d561e67527bc1ecb025c59d53b9f7ef");
 
             btcClient.connect();
+            btcClient.disconnect();
 
             System.gc();
         }
