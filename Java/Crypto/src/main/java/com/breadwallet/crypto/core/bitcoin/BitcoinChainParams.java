@@ -2,6 +2,7 @@ package com.breadwallet.crypto.core.bitcoin;
 
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinChainParams;
 
+// TODO: Add MAINNET
 // TODO: Review visibility (for class, methods, fields, etc.)
 public class BitcoinChainParams implements com.breadwallet.crypto.api.bitcoin.BitcoinChainParams {
 

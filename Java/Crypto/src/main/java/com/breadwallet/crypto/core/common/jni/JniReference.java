@@ -15,7 +15,7 @@ public class JniReference {
      */
     protected long jniReferenceAddress;
 
-    protected JniReference (long jniReferenceAddress)
+    protected JniReference(long jniReferenceAddress)
     {
         this.jniReferenceAddress = jniReferenceAddress;
     }
@@ -25,7 +25,7 @@ public class JniReference {
         dispose();
     }
 
-    public void dispose() {
+    protected void dispose() {
         disposeNative();
     }
 

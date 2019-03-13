@@ -1,4 +1,6 @@
-package com.breadwallet.crypto.api;
+package com.breadwallet.crypto.api.walletmanager;
+
+import com.breadwallet.crypto.api.WalletManager;
 
 import java.util.Map;
 

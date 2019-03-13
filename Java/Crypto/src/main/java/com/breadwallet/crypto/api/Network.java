@@ -4,6 +4,7 @@ import com.breadwallet.crypto.api.bitcoin.BitcoinChainParams;
 
 // TODO: Revisit this class and consider moving to interfaces along with the Visitor pattern
 public class Network {
+
     enum Type { BITCOIN, BITCASH, ETHEREUM}
 
     public static final class Bitcoin {

@@ -11,7 +11,7 @@ import java.util.Map;
 // TODO: Review visibility (for class, methods, fields, etc.)
 public class CoreBitcoinWalletManager extends JniReference {
 
-    private static Map<Long, WeakReference<CoreBitcoinWalletManager>> wmMap = new HashMap<>();
+    private static final Map<Long, WeakReference<CoreBitcoinWalletManager>> wmMap = new HashMap<>();
 
     private static native long createBitcoinWalletManager(CoreBitcoinMasterPubKey mpk,
                                                           CoreBitcoinChainParams params,

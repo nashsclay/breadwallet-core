@@ -3,6 +3,7 @@ package com.breadwallet.crypto.api;
 import java.math.BigInteger;
 
 public class Amount {
+
     public final BigInteger value;  // UInt256 *core
     public final Unit unit;
     public final boolean isNegative;

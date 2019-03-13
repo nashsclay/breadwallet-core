@@ -1,9 +1,6 @@
 package com.breadwallet.crypto.api.bitcoin;
 
-import com.breadwallet.crypto.api.WalletManagerPersistenceClient;
-import com.breadwallet.crypto.api.WalletManager;
-
-import java.util.Map;
+import com.breadwallet.crypto.api.walletmanager.WalletManagerPersistenceClient;
 
 public interface BitcoinPersistenceClient extends WalletManagerPersistenceClient {
 }

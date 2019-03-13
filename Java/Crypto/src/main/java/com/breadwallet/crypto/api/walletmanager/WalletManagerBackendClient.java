@@ -1,4 +1,4 @@
-package com.breadwallet.crypto.api;
+package com.breadwallet.crypto.api.walletmanager;
 
 public interface WalletManagerBackendClient {
 

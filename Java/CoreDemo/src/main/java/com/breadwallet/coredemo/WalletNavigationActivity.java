@@ -3,12 +3,15 @@ package com.breadwallet.coredemo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.breadwallet.core.ethereum.BREthereumNetwork;
-import com.breadwallet.crypto.core.bitcoin.BitcoinNetworks;
+import com.breadwallet.crypto.api.CryptoApi;
+import com.breadwallet.crypto.api.bitcoin.Bitcoin;
+import com.breadwallet.crypto.core.CoreCryptoApi;
 
 import java.io.File;
 
 public class WalletNavigationActivity extends AppCompatActivity {
+
+    static { CryptoApi.setProvider(new CoreCryptoApi()); }
 
     CoreDemoEthereumClient ethClient = null;
 
@@ -31,7 +34,8 @@ public class WalletNavigationActivity extends AppCompatActivity {
             if (storageFile.exists()) deleteRecursively(storageFile);
             storageFile.mkdirs();
 
-            CoreDemoBitcoinClient btcClient = new CoreDemoBitcoinClient(BitcoinNetworks.TESTNET,
+            CoreDemoBitcoinClient btcClient = new CoreDemoBitcoinClient(
+                    Bitcoin.TESTNET,
                     storageFile.getAbsolutePath(),
                     "0xa9de3dbd7d561e67527bc1ecb025c59d53b9f7ef");
 

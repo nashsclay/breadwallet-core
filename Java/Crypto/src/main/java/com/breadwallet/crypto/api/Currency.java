@@ -1,6 +1,7 @@
 package com.breadwallet.crypto.api;
 
 public class Currency {
+
     public final String code;
     public final String symbol;
     public final String name;
