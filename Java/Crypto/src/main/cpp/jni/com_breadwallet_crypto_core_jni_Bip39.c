@@ -1,4 +1,3 @@
-//  Created by Michael Carrara on 3/19/2019
 //  Copyright (c) 2019 breadwallet LLC.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
