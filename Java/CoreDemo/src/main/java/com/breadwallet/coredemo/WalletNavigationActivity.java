@@ -11,7 +11,7 @@ import java.io.File;
 
 public class WalletNavigationActivity extends AppCompatActivity {
 
-    static { CryptoApi.setProvider(new CoreCryptoApi()); }
+    static { CryptoApi.init(new CoreCryptoApi()); }
 
     CoreDemoEthereumClient ethClient = null;
 

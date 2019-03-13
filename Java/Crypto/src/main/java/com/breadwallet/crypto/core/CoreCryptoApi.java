@@ -6,15 +6,15 @@ import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
 import com.breadwallet.crypto.api.provider.AccountProvider;
-import com.breadwallet.crypto.api.provider.BitcoinNetworkProvider;
-import com.breadwallet.crypto.api.provider.BitcoinWalletManagerProvider;
+import com.breadwallet.crypto.api.provider.NetworkProvider;
+import com.breadwallet.crypto.api.provider.WalletManagerProvider;
 import com.breadwallet.crypto.api.provider.CryptoApiProvider;
 import com.breadwallet.crypto.core.bitcoin.BitcoinChainParams;
 import com.breadwallet.crypto.core.bitcoin.BitcoinWalletManager;
 
 import java.util.concurrent.Executor;
 
-// TODO: Add guard around initialization occuring once
+// TODO: Init providers once, instead of on each invocation
 // TODO: Review visibility (for class, methods, fields, etc.)
 public class CoreCryptoApi implements CryptoApiProvider {
 
@@ -38,17 +38,17 @@ public class CoreCryptoApi implements CryptoApiProvider {
     }
 
     @Override
-    public BitcoinWalletManagerProvider bitcoinWalletManagerProvider() {
-        return new BitcoinWalletManagerProvider() {
+    public WalletManagerProvider walletManagerProvider() {
+        return new WalletManagerProvider() {
             @Override
-            public WalletManager create(BitcoinWalletManagerListener listener,
-                                        Account account,
-                                        Network network,
-                                        WalletManager.Mode mode,
-                                        int earliestKeyTime,
-                                        String storagePath,
-                                        BitcoinPersistenceClient persistenceClient,
-                                        BitcoinBackendClient backendClient) {
+            public WalletManager createBitcoinWalletManager(BitcoinWalletManagerListener listener,
+                                                            Account account,
+                                                            Network network,
+                                                            WalletManager.Mode mode,
+                                                            int earliestKeyTime,
+                                                            String storagePath,
+                                                            BitcoinPersistenceClient persistenceClient,
+                                                            BitcoinBackendClient backendClient) {
                 return new BitcoinWalletManager(listener,
                         account,
                         network,
@@ -60,15 +60,15 @@ public class CoreCryptoApi implements CryptoApiProvider {
             }
 
             @Override
-            public WalletManager create(Executor executor,
-                                        BitcoinWalletManagerListener listener,
-                                        Account account,
-                                        Network network,
-                                        WalletManager.Mode mode,
-                                        int earliestKeyTime,
-                                        String storagePath,
-                                        BitcoinPersistenceClient persistenceClient,
-                                        BitcoinBackendClient backendClient) {
+            public WalletManager createBitcoinWalletManager(Executor executor,
+                                                            BitcoinWalletManagerListener listener,
+                                                            Account account,
+                                                            Network network,
+                                                            WalletManager.Mode mode,
+                                                            int earliestKeyTime,
+                                                            String storagePath,
+                                                            BitcoinPersistenceClient persistenceClient,
+                                                            BitcoinBackendClient backendClient) {
                 return new BitcoinWalletManager(executor,
                         listener,
                         account,
@@ -83,8 +83,8 @@ public class CoreCryptoApi implements CryptoApiProvider {
     }
 
     @Override
-    public BitcoinNetworkProvider bitcoinNetworkProvider() {
-        return new BitcoinNetworkProvider() {
+    public NetworkProvider networkProvider() {
+        return new NetworkProvider() {
             @Override
             public Network testnet() {
                 return new Network(new Network.Bitcoin("BTC Testnet", 0x40, BitcoinChainParams.TESTNET));

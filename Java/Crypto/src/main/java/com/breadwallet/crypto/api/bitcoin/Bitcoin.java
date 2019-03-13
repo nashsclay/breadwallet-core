@@ -12,7 +12,7 @@ public interface Bitcoin {
     Unit SAT = CURRENCY.baseUnit;
     Unit BITCOIN = CURRENCY.defaultUnit;
 
-    Network TESTNET = CryptoApi.getCryptoApiProvider().bitcoinNetworkProvider().testnet();
+    Network TESTNET = CryptoApi.cryptoApiProvider().networkProvider().testnet();
 
-    Network MAINNET = CryptoApi.getCryptoApiProvider().bitcoinNetworkProvider().mainnet();
+    Network MAINNET = CryptoApi.cryptoApiProvider().networkProvider().mainnet();
 }

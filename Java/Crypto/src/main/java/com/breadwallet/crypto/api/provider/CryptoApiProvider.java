@@ -4,7 +4,7 @@ public interface CryptoApiProvider {
 
     AccountProvider accountProvider();
 
-    BitcoinWalletManagerProvider bitcoinWalletManagerProvider();
+    WalletManagerProvider walletManagerProvider();
 
-    BitcoinNetworkProvider bitcoinNetworkProvider();
+    NetworkProvider networkProvider();
 }

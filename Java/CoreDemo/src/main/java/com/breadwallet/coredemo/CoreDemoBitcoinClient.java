@@ -2,12 +2,11 @@ package com.breadwallet.coredemo;
 
 import android.util.Log;
 
-import com.breadwallet.crypto.api.AccountFactory;
+import com.breadwallet.crypto.api.Account;
 import com.breadwallet.crypto.api.Network;
 import com.breadwallet.crypto.api.Transfer;
 import com.breadwallet.crypto.api.Wallet;
 import com.breadwallet.crypto.api.WalletManager;
-import com.breadwallet.crypto.api.WalletManagerFactory;
 import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
@@ -25,9 +24,9 @@ public class CoreDemoBitcoinClient
     private final WalletManager walletManager;
 
     public CoreDemoBitcoinClient(Network network, String storagePath, String paperKey) {
-        this.walletManager = WalletManagerFactory.create(
+        this.walletManager = WalletManager.FACTORY.createBitcoinWalletManager(
                 this,
-                AccountFactory.create(paperKey),
+                Account.FACTORY.create(paperKey),
                 network,
                 WalletManager.Mode.API_WITH_P2P_SUBMIT,
                 1543190400,
