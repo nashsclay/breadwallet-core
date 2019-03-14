@@ -15,6 +15,7 @@ import com.breadwallet.crypto.api.events.wallet.WalletEvent;
 import com.breadwallet.crypto.api.events.walletmanager.WalletManagerEvent;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 public class CoreDemoBitcoinClient
         implements BitcoinWalletManagerListener, BitcoinBackendClient, BitcoinPersistenceClient {
@@ -25,14 +26,15 @@ public class CoreDemoBitcoinClient
 
     public CoreDemoBitcoinClient(Network network, String storagePath, String paperKey) {
         this.walletManager = WalletManager.FACTORY.createBitcoinWalletManager(
-                this,
                 Account.FACTORY.create(paperKey),
                 network,
                 WalletManager.Mode.API_WITH_P2P_SUBMIT,
                 1543190400,
                 storagePath,
                 this,
-                this);
+                this,
+                this,
+                Executors.newSingleThreadExecutor());
     }
 
     public void connect() {

@@ -24,9 +24,6 @@
 #include "BRCryptoJni.h"
 #include "com_breadwallet_crypto_core_common_jni_JniReference.h"
 
-// TODO: Add defensive checks on inputs
-// TODO: Re-write using personal coding style
-
 #define JNI_REFERENCE_ADDRESS_FIELD_NAME "jniReferenceAddress"
 #define JNI_REFERENCE_ADDRESS_FIELD_TYPE "J" // long
 

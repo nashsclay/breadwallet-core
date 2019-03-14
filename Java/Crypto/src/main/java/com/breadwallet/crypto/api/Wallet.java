@@ -8,7 +8,7 @@ public interface Wallet {
 
     Currency currency();
 
-    Amount getBalance();
+    Amount balance();
 
-    Transfer[] getTransfers();
+    Transfer[] transfers();
 }

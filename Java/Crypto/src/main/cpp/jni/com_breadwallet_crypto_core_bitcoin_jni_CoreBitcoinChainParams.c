@@ -18,8 +18,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#include <stdlib.h>
-#include <assert.h>
+#include <stdlib.h
 
 #include "BRChainParams.h"
 
@@ -31,5 +30,6 @@ JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoin
 {
     BRChainParams *result = (BRChainParams *) calloc (1, sizeof (BRChainParams));
     memcpy (result, &BRTestNetParams, sizeof (BRChainParams));
+
     return (jlong) result;
 }

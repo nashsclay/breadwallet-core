@@ -1,5 +1,5 @@
 package com.breadwallet.crypto.api.events.transfer;
 
-// TODO: Create transfer events
+// TODO: Add changed event
 public interface TransferEvent {
 }

@@ -2,8 +2,7 @@ package com.breadwallet.crypto.core.bitcoin;
 
 import com.breadwallet.crypto.api.bitcoin.BitcoinChainParams;
 
-// TODO: Review visibility (for class, methods, fields, etc.)
-/* package */ class BitcoinChainParamsAdapter {
+/* package */ final class BitcoinChainParamsAdapter {
 
     public static com.breadwallet.crypto.core.bitcoin.BitcoinChainParams from(BitcoinChainParams bcp) {
         if (bcp instanceof com.breadwallet.crypto.core.bitcoin.BitcoinChainParams) {

@@ -2,16 +2,16 @@ package com.breadwallet.crypto.core.bitcoin.jni;
 
 public interface CoreBitcoinWalletManagerClient {
 
-    void handleTransactionAdded(long wid, long tid);
-    void handleTransactionUpdated(long wid, long tid);
-    void handleTransactionDeleted(long wid, long tid);
+    void handleTransactionAdded(CoreBitcoinWallet wallet);
+    void handleTransactionUpdated(CoreBitcoinWallet wallet);
+    void handleTransactionDeleted(CoreBitcoinWallet wallet);
 
-    void handleWalletCreated(long wid);
-    void handleWalletBalanceUpdated(long wid, long satoshi);
-    void handleWalletDeleted(long wid);
+    void handleWalletCreated(CoreBitcoinWallet wallet);
+    void handleWalletBalanceUpdated(CoreBitcoinWallet wallet, long satoshi);
+    void handleWalletDeleted(CoreBitcoinWallet wallet);
 
     void handleWalletManagerConnected();
     void handleWalletManagerDisconnected();
     void handleWalletManagerSyncStarted();
-    void handleWalletManagerSyncStopped(int errorCode);
+    void handleWalletManagerSyncStopped(String error);
 }

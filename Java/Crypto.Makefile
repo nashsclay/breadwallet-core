@@ -19,7 +19,6 @@ JNI_HDRS=$(JNI_SRCS:.c=.h)
 
 JAVA_API_SDIR=Crypto/src/main/java/com/breadwallet/crypto/api
 JAVA_API_SRCS=\
-	$(JAVA_API_SDIR)/bitcoin/Bitcoin.java \
 	$(JAVA_API_SDIR)/bitcoin/BitcoinBackendClient.java \
 	$(JAVA_API_SDIR)/bitcoin/BitcoinChainParams.java \
 	$(JAVA_API_SDIR)/bitcoin/BitcoinMasterPubKey.java \
@@ -31,29 +30,26 @@ JAVA_API_SRCS=\
 	$(JAVA_API_SDIR)/events/wallet/CreatedWalletEvent.java \
 	$(JAVA_API_SDIR)/events/wallet/DeletedWalletEvent.java \
 	$(JAVA_API_SDIR)/events/walletmanager/WalletManagerEvent.java \
-	$(JAVA_API_SDIR)/events/walletmanager/ConnectedWalletManagerEvent.java \
-	$(JAVA_API_SDIR)/events/walletmanager/DisconnectedWalletManagerEvent.java \
+	$(JAVA_API_SDIR)/events/walletmanager/ChangedWalletManagerEvent.java \
 	$(JAVA_API_SDIR)/events/walletmanager/SyncStartedWalletManagerEvent.java \
-	$(JAVA_API_SDIR)/events/walletmanager/SyncStoppedWalletManagerEvent.java \
-	$(JAVA_API_SDIR)/provider/AccountProvider.java \
-	$(JAVA_API_SDIR)/provider/BitcoinNetworkProvider.java \
-	$(JAVA_API_SDIR)/provider/BitcoinWalletManagerProvider.java \
-	$(JAVA_API_SDIR)/provider/CryptoApiProvider.java \
+	$(JAVA_API_SDIR)/events/walletmanager/SyncEndedWalletManagerEvent.java \
+	$(JAVA_API_SDIR)/factories/AccountFactory.java \
+	$(JAVA_API_SDIR)/factories/NetworkFactory.java \
+	$(JAVA_API_SDIR)/factories/WalletManagerFactory.java \
 	$(JAVA_API_SDIR)/walletmanager/WalletManagerBackendClient.java \
 	$(JAVA_API_SDIR)/walletmanager/WalletManagerListener.java \
 	$(JAVA_API_SDIR)/walletmanager/WalletManagerPersistenceClient.java \
 	$(JAVA_API_SDIR)/Account.java \
-	$(JAVA_API_SDIR)/AccountFactory.java \
 	$(JAVA_API_SDIR)/Address.java \
 	$(JAVA_API_SDIR)/Amount.java \
+	$(JAVA_API_SDIR)/Bitcoin.java \
 	$(JAVA_API_SDIR)/CryptoApi.java \
 	$(JAVA_API_SDIR)/Currency.java \
 	$(JAVA_API_SDIR)/Network.java \
 	$(JAVA_API_SDIR)/Transfer.java \
 	$(JAVA_API_SDIR)/Unit.java \
 	$(JAVA_API_SDIR)/Wallet.java \
-	$(JAVA_API_SDIR)/WalletManager.java \
-	$(JAVA_API_SDIR)/WalletManagerFactory.java
+	$(JAVA_API_SDIR)/WalletManager.java
 JAVA_API_OBJS=$(JAVA_API_SRCS:.java=.class)
 
 # Crypto Core
@@ -62,12 +58,14 @@ JAVA_CORE_SDIR=Crypto/src/main/java/com/breadwallet/crypto/core
 JAVA_CORE_SRCS=\
 	$(JAVA_CORE_SDIR)/bitcoin/jni/CoreBitcoinChainParams.java \
 	$(JAVA_CORE_SDIR)/bitcoin/jni/CoreBitcoinMasterPubKey.java \
+	$(JAVA_CORE_SDIR)/bitcoin/jni/CoreBitcoinWallet.java \
 	$(JAVA_CORE_SDIR)/bitcoin/jni/CoreBitcoinWalletManager.java \
 	$(JAVA_CORE_SDIR)/bitcoin/jni/CoreBitcoinWalletManagerClient.java \
 	$(JAVA_CORE_SDIR)/bitcoin/BitcoinChainParams.java \
 	$(JAVA_CORE_SDIR)/bitcoin/BitcoinChainParamsAdapter.java \
 	$(JAVA_CORE_SDIR)/bitcoin/BitcoinMasterPubKey.java \
 	$(JAVA_CORE_SDIR)/bitcoin/BitcoinMasterPubKeyAdapter.java \
+	$(JAVA_CORE_SDIR)/bitcoin/BitcoinWallet.java \
 	$(JAVA_CORE_SDIR)/bitcoin/BitcoinWalletManager.java \
 	$(JAVA_CORE_SDIR)/common/jni/JniReference.java \
 	$(JAVA_CORE_SDIR)/jni/Bip39.java \

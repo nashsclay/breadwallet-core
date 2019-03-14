@@ -1,11 +1,11 @@
 package com.breadwallet.crypto.api;
 
 import com.breadwallet.crypto.api.bitcoin.BitcoinMasterPubKey;
-import com.breadwallet.crypto.api.provider.AccountProvider;
+import com.breadwallet.crypto.api.factories.AccountFactory;
 
 public interface Account {
 
-    AccountProvider FACTORY = CryptoApi.cryptoApiProvider().accountProvider();
+    AccountFactory FACTORY = CryptoApi.provider().accountFactory();
 
     BitcoinMasterPubKey masterPublicKey();
 }

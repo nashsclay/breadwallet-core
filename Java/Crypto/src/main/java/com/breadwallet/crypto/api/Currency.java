@@ -18,4 +18,10 @@ public class Currency {
         this.baseUnit    = new Unit (this, baseUnitName, baseUnitSymbol);
         this.defaultUnit = new Unit (code, symbol, (long) Math.pow (10, decimals), this.baseUnit);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Currency(code = %s, symbol = %s, name = %s, decimals = %d, base = %s, default = %s)",
+                code, symbol, name, decimals, baseUnit, defaultUnit);
+    }
 }

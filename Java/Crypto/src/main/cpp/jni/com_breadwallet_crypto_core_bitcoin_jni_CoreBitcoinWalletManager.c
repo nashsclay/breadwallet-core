@@ -19,19 +19,12 @@
 //  THE SOFTWARE.
 
 #include <stdlib.h>
-#include <android/log.h>
 #include <assert.h>
-#include <BRWalletManager.h>
 
 #include "BRWalletManager.h"
 
 #include "BRCryptoJni.h"
 #include "com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManager.h"
-
-#define  LOG_TAG "CoreBitcoinWalletManager"
-
-// TODO: Add defensive checks on inputs
-// TODO: Re-write using personal coding style
 
 static jclass trampolineClass = NULL;
 static jmethodID trampolineHandleTransactionAdded = NULL;
@@ -69,7 +62,6 @@ JNIEXPORT void JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinW
         JNIEnv * env,
         jclass thisClass)
 {
-    if (NULL != trampolineClass) return;
     trampolineClass = (*env)->NewGlobalRef(env, thisClass);
 
     trampolineHandleTransactionAdded       = trampolineOrFatal (env, "handleTransactionAdded",             "(JJJ)V");
@@ -94,14 +86,17 @@ JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoin
         jint earliestKeyTime,
         jstring storagePathString)
 {
+    assert (!(*env)->IsSameObject (env, masterPublicKeyObject, NULL));
+    assert (!(*env)->IsSameObject (env, chainParamsObject, NULL));
+    assert (!(*env)->IsSameObject (env, storagePathString, NULL));
+    assert (earliestKeyTime >= 0);
+
     BRMasterPubKey *masterPubKey = (BRMasterPubKey *) getJNIReference(env, masterPublicKeyObject);
     BRChainParams *chainParams   = (BRChainParams *) getJNIReference(env, chainParamsObject);
     const char *storagePath = (*env)->GetStringUTFChars (env, storagePathString, 0);
-    assert (earliestKeyTime >= 0);
-    BRWalletManagerClient client = { transactionEventCallback, walletEventCallback, walletManagerEventCallback };
 
+    BRWalletManagerClient client = { transactionEventCallback, walletEventCallback, walletManagerEventCallback };
     BRWalletManager *walletManager = BRWalletManagerNew(client, *masterPubKey, chainParams, earliestKeyTime, storagePath);
-    assert (walletManager);
 
     return (jlong) walletManager;
 }
@@ -147,8 +142,6 @@ transactionEventCallback (BRWalletManager wmid,
     JNIEnv *env = getEnv();
     if (NULL == env) return;
 
-    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "TransactionEvent: %d\n", e.type);
-
     switch (e.type) {
         case BITCOIN_TRANSACTION_ADDED:
             (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleTransactionAdded, (jlong) wmid, (jlong) wid, (jlong) tid);
@@ -170,8 +163,6 @@ walletEventCallback (BRWalletManager wmid,
     JNIEnv *env = getEnv();
     if (NULL == env) return;
 
-    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "WalletEvent: %d\n", e.type);
-
     switch (e.type) {
         case BITCOIN_WALLET_CREATED:
             (*env)->CallStaticVoidMethod(env, trampolineClass, trampolineHandleWalletCreated, (jlong) wmid, (jlong) wid);
@@ -190,8 +181,6 @@ walletManagerEventCallback (BRWalletManager wmid,
                             BRWalletManagerEvent e) {
     JNIEnv *env = getEnv();
     if (NULL == env) return;
-
-    __android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, "WalletManagerEvent: %d\n", e.type);
 
     switch (e.type) {
         case BITCOIN_WALLET_MANAGER_CONNECTED:

@@ -6,10 +6,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: Add parameter validation
-// TODO: Hook up listener callbacks
-// TODO: Review visibility (for class, methods, fields, etc.)
-public class CoreBitcoinWalletManager extends JniReference {
+public final class CoreBitcoinWalletManager extends JniReference {
 
     private static final Map<Long, WeakReference<CoreBitcoinWalletManager>> wmMap = new HashMap<>();
 
@@ -104,7 +101,8 @@ public class CoreBitcoinWalletManager extends JniReference {
                                     CoreBitcoinChainParams params,
                                     int earliestKeyTime,
                                     String storagePath) {
-        // ISSUE: we will miss the first event because we are not registerd in the map yet
+        // ISSUE: we miss the first event because we are not registerd in the map yet, look into
+        //        solutions
         super(createBitcoinWalletManager(mpk, params, earliestKeyTime, storagePath));
 
         wmMap.put(jniReferenceAddress, new WeakReference<> (this));
@@ -116,47 +114,57 @@ public class CoreBitcoinWalletManager extends JniReference {
 
     public native void disconnect();
 
+    @Override
     protected native void disposeNative();
 
     private void handleTransactionAdded(long wid, long tid) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleTransactionAdded(wid, tid);
+            // TODO: Use tid to create transfer wrapper
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleTransactionAdded(wallet);
         }
     }
 
     private void handleTransactionUpdated(long wid, long tid) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleTransactionUpdated(wid, tid);
+            // TODO: Use tid to create transfer wrapper
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleTransactionUpdated(wallet);
         }
     }
 
     private void handleTransactionDeleted(long wid, long tid) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleTransactionDeleted(wid, tid);
+            // TODO: Use tid to create transfer wrapper
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleTransactionDeleted(wallet);
         }
     }
 
     private void handleWalletCreated(long wid) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleWalletCreated(wid);
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleWalletCreated(wallet);
         }
     }
 
     private void handleWalletBalanceUpdated(long wid, long satoshi) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleWalletBalanceUpdated(wid, satoshi);
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleWalletBalanceUpdated(wallet, satoshi);
         }
     }
 
     private void handleWalletDeleted(long wid) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleWalletDeleted(wid);
+            CoreBitcoinWallet wallet = new CoreBitcoinWallet(wid, this);
+            wmc.handleWalletDeleted(wallet);
         }
     }
 
@@ -184,7 +192,8 @@ public class CoreBitcoinWalletManager extends JniReference {
     private void handleWalletManagerSyncStopped(int errorCode) {
         CoreBitcoinWalletManagerClient wmc = client.get();
         if (null != wmc) {
-            wmc.handleWalletManagerSyncStopped(errorCode);
+            // TODO: Convert error code to string properly
+            wmc.handleWalletManagerSyncStopped(Integer.toString(errorCode));
         }
     }
 }

@@ -26,18 +26,16 @@
 #include "BRCryptoJni.h"
 #include "com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey.h"
 
-// TODO: Add defensive checks on inputs
-// TODO: Re-write using personal coding style
-
 JNIEXPORT jlong JNICALL Java_com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinMasterPubKey_createBitcoinMasterPubKey (
         JNIEnv * env,
         jclass thisClass,
         jbyteArray seedByteArray)
 {
+    assert (!(*env)->IsSameObject (env, seedByteArray, NULL));
+
     jsize seedLength = (*env)->GetArrayLength (env, seedByteArray);
     jbyte *seedBytes = (*env)->GetByteArrayElements (env, seedByteArray, 0);
 
-    // Allocate, then fill, our BRMasterPubKey result with the computed pubKey
     BRMasterPubKey *resKey = (BRMasterPubKey *) calloc (1, sizeof (BRMasterPubKey));
     *resKey = BRBIP32MasterPubKey(seedBytes, seedLength);
 

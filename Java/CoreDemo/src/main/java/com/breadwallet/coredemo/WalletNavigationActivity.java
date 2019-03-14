@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.breadwallet.crypto.api.CryptoApi;
-import com.breadwallet.crypto.api.bitcoin.Bitcoin;
+import com.breadwallet.crypto.api.Bitcoin;
 import com.breadwallet.crypto.core.CoreCryptoApi;
 
 import java.io.File;

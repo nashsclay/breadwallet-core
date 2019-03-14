@@ -1,18 +1,28 @@
 package com.breadwallet.crypto.api;
 
-import com.breadwallet.crypto.api.provider.CryptoApiProvider;
+import com.breadwallet.crypto.api.factories.AccountFactory;
+import com.breadwallet.crypto.api.factories.NetworkFactory;
+import com.breadwallet.crypto.api.factories.WalletManagerFactory;
 
 // TODO: Add guard around initialization occuring once
-// TODO: Review visibility (for class, methods, fields, etc.)
 public class CryptoApi {
 
-    private static CryptoApiProvider cryptoApiProvider;
+    public interface Provider {
 
-    public static void init(CryptoApiProvider provider) {
-        cryptoApiProvider = provider;
+        AccountFactory accountFactory();
+
+        WalletManagerFactory walletManagerFactory();
+
+        NetworkFactory networkFactory();
     }
 
-    public static CryptoApiProvider cryptoApiProvider() {
-        return cryptoApiProvider;
+    private static Provider provider;
+
+    public static void init(Provider provider) {
+        CryptoApi.provider = provider;
+    }
+
+    /* package */ static Provider provider() {
+        return provider;
     }
 }

@@ -17,4 +17,9 @@ public class Amount {
     public Amount (long value, Unit unit) {
         this (BigInteger.valueOf(value), unit);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Amount(value = %s, unit = %s, negative = %b)", value, unit, isNegative);
+    }
 }

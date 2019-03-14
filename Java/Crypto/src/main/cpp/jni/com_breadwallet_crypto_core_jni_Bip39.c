@@ -26,16 +26,15 @@
 
 #include "com_breadwallet_crypto_core_jni_Bip39.h"
 
-// TODO: Add defensive checks on inputs
-// TODO: Re-write using personal coding style
-
 JNIEXPORT jbyteArray JNICALL Java_com_breadwallet_crypto_core_jni_Bip39_deriveKey (
         JNIEnv * env,
         jclass thisClass,
         jstring seedString)
 {
-    UInt512 seed        = UINT512_ZERO;
-    const char *status  = (*env)->GetStringUTFChars (env, seedString, 0);
+    assert (!(*env)->IsSameObject (env, thisClass, NULL));
+
+    UInt512 seed = UINT512_ZERO;
+    const char *status = (*env)->GetStringUTFChars (env, seedString, 0);
 
     BRBIP39DeriveKey(seed.u8, status, NULL);
 

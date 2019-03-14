@@ -30,4 +30,9 @@ public class Unit {
         this.base = base;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Unit(currency = %s, name = %s, symbol = %s, scale = %d, base = %s)",
+                currency, name, symbol, scale, base);
+    }
 }

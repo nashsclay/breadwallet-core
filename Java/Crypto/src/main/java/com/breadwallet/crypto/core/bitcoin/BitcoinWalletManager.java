@@ -1,72 +1,68 @@
 package com.breadwallet.crypto.core.bitcoin;
 
 import com.breadwallet.crypto.api.Account;
+import com.breadwallet.crypto.api.Amount;
 import com.breadwallet.crypto.api.Network;
+import com.breadwallet.crypto.api.Wallet;
 import com.breadwallet.crypto.api.WalletManager;
+import com.breadwallet.crypto.api.Bitcoin;
 import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
 import com.breadwallet.crypto.api.events.wallet.BalanceUpdatedWalletEvent;
 import com.breadwallet.crypto.api.events.wallet.CreatedWalletEvent;
 import com.breadwallet.crypto.api.events.wallet.DeletedWalletEvent;
-import com.breadwallet.crypto.api.events.walletmanager.ConnectedWalletManagerEvent;
-import com.breadwallet.crypto.api.events.walletmanager.DisconnectedWalletManagerEvent;
+import com.breadwallet.crypto.api.events.walletmanager.ChangedWalletManagerEvent;
+import com.breadwallet.crypto.api.events.walletmanager.SyncEndedWalletManagerEvent;
 import com.breadwallet.crypto.api.events.walletmanager.SyncStartedWalletManagerEvent;
-import com.breadwallet.crypto.api.events.walletmanager.SyncStoppedWalletManagerEvent;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinChainParams;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinMasterPubKey;
+import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWallet;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWalletManager;
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinWalletManagerClient;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
-// TODO: Add parameter validation
-// TODO: Review visibility (for class, methods, fields, etc.)
-// TODO: Consider exposing this via a registered factory
-public final class BitcoinWalletManager
-        implements WalletManager, CoreBitcoinWalletManagerClient {
+// TODO: Verify assumption that CoreBitcoinWalletManagerClient callbacks are on single native thread
+public final class BitcoinWalletManager implements WalletManager, CoreBitcoinWalletManagerClient {
 
-    protected static Executor DEFAULT_EXECUTOR = Executors.newSingleThreadExecutor();
+    private final WeakReference<BitcoinWalletManagerListener> listener;
+    private final CoreBitcoinWalletManager coreWalletManager;
 
-    protected final WeakReference<BitcoinWalletManagerListener> listener;
-    protected final CoreBitcoinWalletManager coreWalletManager;
+    private final BitcoinPersistenceClient persistenceClient;
+    private final BitcoinBackendClient backendClient;
 
-    protected final BitcoinPersistenceClient persistenceClient;
-    protected final BitcoinBackendClient backendClient;
+    private final Account account;
+    private final Network network;
+    private final Mode mode;
+    private final long earliestKeyTime;
+    private final String storagePath;
+    private final Executor listenerExecutor;
 
-    protected final Account account;
-    protected final Network network;
-    protected final Mode mode;
-    protected final long earliestKeyTime;
-    protected final String storagePath;
-    protected final Executor listenerExecutor;
+    private State state;
 
-    protected State state;
-
-    public BitcoinWalletManager(BitcoinWalletManagerListener listener,
-                                Account account,
+    public BitcoinWalletManager(Account account,
                                 Network network,
                                 Mode mode,
                                 int earliestKeyTime,
                                 String storagePath,
                                 BitcoinPersistenceClient persistenceClient,
-                                BitcoinBackendClient backendClient) {
-        this(DEFAULT_EXECUTOR, listener, account, network, mode, earliestKeyTime, storagePath, persistenceClient, backendClient);
-    }
-
-    public BitcoinWalletManager(Executor listenerExecutor,
+                                BitcoinBackendClient backendClient,
                                 BitcoinWalletManagerListener listener,
-                                Account account,
-                                Network network,
-                                Mode mode,
-                                int earliestKeyTime,
-                                String storagePath,
-                                BitcoinPersistenceClient persistenceClient,
-                                BitcoinBackendClient backendClient) {
-        CoreBitcoinChainParams chainParams = BitcoinChainParamsAdapter.from(network.chainParams()).chainParams;
-        CoreBitcoinMasterPubKey masterPubKey = BitcoinMasterPubKeyAdapter.from(account.masterPublicKey()).masterPubKey;
+                                Executor listenerExecutor) {
+        if (null == account) throw new IllegalArgumentException("Invalid seed");
+        if (null == network) throw new IllegalArgumentException("Invalid network");
+        if (null == mode) throw new IllegalArgumentException("Invalid mode");
+        // TODO: Add validation on earliestKeyTime
+        if (null == storagePath) throw new IllegalArgumentException("Invalid storage path");
+        if (null == persistenceClient) throw new IllegalArgumentException("Invalid persistence client");
+        if (null == backendClient) throw new IllegalArgumentException("Invalid backend client");
+        if (null == listener) throw new IllegalArgumentException("Invalid listener");
+        if (null == listenerExecutor) throw new IllegalArgumentException("Invalid listener executor");
+
+        CoreBitcoinChainParams chainParams = BitcoinChainParamsAdapter.from(network.chainParams()).chainParams();
+        CoreBitcoinMasterPubKey masterPubKey = BitcoinMasterPubKeyAdapter.from(account.masterPublicKey()).masterPubKey();
 
         this.listenerExecutor = listenerExecutor;
         this.account = account;
@@ -98,7 +94,7 @@ public final class BitcoinWalletManager
     // CoreWalletManagerClient
 
     @Override
-    public void handleTransactionAdded(long wid, long tid) {
+    public void handleTransactionAdded(CoreBitcoinWallet coreWallet) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
@@ -108,7 +104,7 @@ public final class BitcoinWalletManager
     }
 
     @Override
-    public void handleTransactionUpdated(long wid, long tid) {
+    public void handleTransactionUpdated(CoreBitcoinWallet coreWallet) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
@@ -118,7 +114,7 @@ public final class BitcoinWalletManager
     }
 
     @Override
-    public void handleTransactionDeleted(long wid, long tid) {
+    public void handleTransactionDeleted(CoreBitcoinWallet coreWallet) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
@@ -128,74 +124,94 @@ public final class BitcoinWalletManager
     }
 
     @Override
-    public void handleWalletCreated(long wid) {
+    public void handleWalletCreated(CoreBitcoinWallet coreWallet) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                // TODO: Get wallet using wid
-                l.handleWalletEvent(this, null, new CreatedWalletEvent());
+                Wallet wallet = new BitcoinWallet(coreWallet, this);
+                l.handleWalletEvent(this, wallet, new CreatedWalletEvent());
             }
         });
     }
 
     @Override
-    public void handleWalletBalanceUpdated(long wid, long satoshi) {
+    public void handleWalletBalanceUpdated(CoreBitcoinWallet coreWallet, long satoshi) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
                 // TODO: Get wallet using wid
-                l.handleWalletEvent(this, null, new BalanceUpdatedWalletEvent(satoshi));
+                Wallet wallet = new BitcoinWallet(coreWallet, this);
+                Amount amount = new Amount(satoshi, Bitcoin.SATOSHI);
+                l.handleWalletEvent(this, wallet, new BalanceUpdatedWalletEvent(amount));
             }
         });
     }
 
     @Override
-    public void handleWalletDeleted(long wid) {
+    public void handleWalletDeleted(CoreBitcoinWallet coreWallet) {
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                // TODO: Get wallet using wid
-                l.handleWalletEvent(this, null, new DeletedWalletEvent());
+                Wallet wallet = new BitcoinWallet(coreWallet, this);
+                l.handleWalletEvent(this, wallet, new DeletedWalletEvent());
             }
         });
     }
 
     @Override
     public void handleWalletManagerConnected() {
+        State oldState = state;
+        state = State.CONNECTED;
+        State newState = state;
+
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                l.handleManagerEvent(this, new ConnectedWalletManagerEvent());
+                l.handleManagerEvent(this, new ChangedWalletManagerEvent(oldState, newState));
             }
         });
     }
 
     @Override
     public void handleWalletManagerDisconnected() {
+        State oldState = state;
+        state = State.DISCONNECTED;
+        State newState = state;
+
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                l.handleManagerEvent(this, new DisconnectedWalletManagerEvent());
+                l.handleManagerEvent(this, new ChangedWalletManagerEvent(oldState, newState));
             }
         });
     }
 
     @Override
     public void handleWalletManagerSyncStarted() {
+        State oldState = state;
+        state = State.SYNCING;
+        State newState = state;
+
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
+                l.handleManagerEvent(this, new ChangedWalletManagerEvent(oldState, newState));
                 l.handleManagerEvent(this, new SyncStartedWalletManagerEvent());
             }
         });
     }
 
     @Override
-    public void handleWalletManagerSyncStopped(int errorCode) {
+    public void handleWalletManagerSyncStopped(String error) {
+        State oldState = state;
+        state = State.CONNECTED;
+        State newState = state;
+
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                l.handleManagerEvent(this, new SyncStoppedWalletManagerEvent(errorCode));
+                l.handleManagerEvent(this, new ChangedWalletManagerEvent(oldState, newState));
+                l.handleManagerEvent(this, new SyncEndedWalletManagerEvent(error));
             }
         });
     }

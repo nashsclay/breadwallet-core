@@ -1,6 +1,5 @@
 package com.breadwallet.crypto.core.common.jni;
 
-// TODO: Review visibility (for class, methods, fields, etc.)
 public class JniReference {
 
     protected static boolean SHOW_FINALIZE = false;
@@ -31,6 +30,7 @@ public class JniReference {
 
     protected native void disposeNative();
 
+    @Override
     public String toString() {
         return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }

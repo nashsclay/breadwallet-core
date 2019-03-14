@@ -2,17 +2,17 @@ package com.breadwallet.crypto.core.bitcoin;
 
 import com.breadwallet.crypto.core.bitcoin.jni.CoreBitcoinMasterPubKey;
 
-// TODO: Add parameter validation
-// TODO: Review visibility (for class, methods, fields, etc.)
-public class BitcoinMasterPubKey implements com.breadwallet.crypto.api.bitcoin.BitcoinMasterPubKey {
+public final class BitcoinMasterPubKey implements com.breadwallet.crypto.api.bitcoin.BitcoinMasterPubKey {
 
-    /* package */ final CoreBitcoinMasterPubKey masterPubKey;
+    private final CoreBitcoinMasterPubKey masterPubKey;
 
     public BitcoinMasterPubKey(byte[] seed) {
-        this(new CoreBitcoinMasterPubKey(seed));
+        // TODO: Add additional seed validation, if possible
+        if (null == seed) throw new IllegalArgumentException("Invalid seed");
+        this.masterPubKey = new CoreBitcoinMasterPubKey(seed);
     }
 
-    private BitcoinMasterPubKey(CoreBitcoinMasterPubKey masterPubKey) {
-        this.masterPubKey = masterPubKey;
+    /* package */ CoreBitcoinMasterPubKey masterPubKey() {
+        return masterPubKey;
     }
 }
