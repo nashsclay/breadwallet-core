@@ -3,9 +3,17 @@ package com.breadwallet.crypto.api;
 import com.breadwallet.crypto.api.bitcoin.BitcoinMasterPubKey;
 import com.breadwallet.crypto.api.factories.AccountFactory;
 
-public interface Account {
+public abstract class Account {
 
-    AccountFactory FACTORY = CryptoApi.provider().accountFactory();
+    private static AccountFactory FACTORY = CryptoApi.provider().accountFactory();
 
-    BitcoinMasterPubKey masterPublicKey();
+    public static Account create(String phrase) {
+        return FACTORY.create(phrase);
+    }
+
+    public static Account create(byte[] seed) {
+        return FACTORY.create(seed);
+    }
+
+    public abstract BitcoinMasterPubKey masterPublicKey();
 }

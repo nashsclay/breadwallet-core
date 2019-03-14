@@ -3,7 +3,7 @@ package com.breadwallet.crypto.core;
 import com.breadwallet.crypto.api.bitcoin.BitcoinMasterPubKey;
 import com.breadwallet.crypto.core.jni.Bip39;
 
-public class Account implements com.breadwallet.crypto.api.Account {
+public final class Account extends com.breadwallet.crypto.api.Account {
 
     private final BitcoinMasterPubKey masterPublicKey;
 

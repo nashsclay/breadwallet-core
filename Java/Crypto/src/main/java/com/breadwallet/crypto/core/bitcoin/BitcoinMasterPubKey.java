@@ -7,7 +7,7 @@ public final class BitcoinMasterPubKey implements com.breadwallet.crypto.api.bit
     private final CoreBitcoinMasterPubKey masterPubKey;
 
     public BitcoinMasterPubKey(byte[] seed) {
-        // TODO: Add additional seed validation, if possible
+        // TODO: Add additional seed validation, if necessary
         if (null == seed) throw new IllegalArgumentException("Invalid seed");
         this.masterPubKey = new CoreBitcoinMasterPubKey(seed);
     }

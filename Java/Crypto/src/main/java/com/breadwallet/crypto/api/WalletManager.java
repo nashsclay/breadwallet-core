@@ -1,16 +1,41 @@
 package com.breadwallet.crypto.api;
 
+import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
+import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
+import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
 import com.breadwallet.crypto.api.factories.WalletManagerFactory;
 
-public interface WalletManager {
+import java.util.concurrent.Executor;
 
-    WalletManagerFactory FACTORY = CryptoApi.provider().walletManagerFactory();
+public abstract class WalletManager {
 
-    enum Mode { API_ONLY, API_WITH_P2P_SUBMIT, P2P_WITH_API_SYNC, P2P_ONLY, }
+    private static final WalletManagerFactory FACTORY = CryptoApi.provider().walletManagerFactory();
 
-    enum State { CREATED, DISCONNECTED, CONNECTED, SYNCING, DELETED }
+    public static WalletManager createBitcoinWalletManager(Account account,
+                                                           Network network,
+                                                           Mode mode,
+                                                           int earliestKeyTime,
+                                                           String storagePath,
+                                                           BitcoinPersistenceClient persistenceClient,
+                                                           BitcoinBackendClient backendClient,
+                                                           BitcoinWalletManagerListener listener,
+                                                           Executor listenerExecutor) {
+        return FACTORY.createBitcoinWalletManager(account,
+                network,
+                mode,
+                earliestKeyTime,
+                storagePath,
+                persistenceClient,
+                backendClient,
+                listener,
+                listenerExecutor);
+    }
 
-    void connect();
+    public enum Mode { API_ONLY, API_WITH_P2P_SUBMIT, P2P_WITH_API_SYNC, P2P_ONLY, }
 
-    void disconnect();
+    public enum State { CREATED, DISCONNECTED, CONNECTED, SYNCING, DELETED }
+
+    public abstract void connect();
+
+    public abstract void disconnect();
 }

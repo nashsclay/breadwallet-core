@@ -4,7 +4,6 @@ import com.breadwallet.crypto.api.factories.AccountFactory;
 import com.breadwallet.crypto.api.factories.NetworkFactory;
 import com.breadwallet.crypto.api.factories.WalletManagerFactory;
 
-// TODO: Add guard around initialization occuring once
 public class CryptoApi {
 
     public interface Provider {
@@ -18,7 +17,8 @@ public class CryptoApi {
 
     private static Provider provider;
 
-    public static void init(Provider provider) {
+    public static synchronized void init(Provider provider) {
+        if (null != CryptoApi.provider) throw new IllegalStateException("Provider already set");
         CryptoApi.provider = provider;
     }
 

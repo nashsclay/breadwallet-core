@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.Executor;
 
 // TODO: Verify assumption that CoreBitcoinWalletManagerClient callbacks are on single native thread
-public final class BitcoinWalletManager implements WalletManager, CoreBitcoinWalletManagerClient {
+public final class BitcoinWalletManager extends WalletManager implements CoreBitcoinWalletManagerClient {
 
     private final WeakReference<BitcoinWalletManagerListener> listener;
     private final CoreBitcoinWalletManager coreWalletManager;
@@ -54,7 +54,7 @@ public final class BitcoinWalletManager implements WalletManager, CoreBitcoinWal
         if (null == account) throw new IllegalArgumentException("Invalid seed");
         if (null == network) throw new IllegalArgumentException("Invalid network");
         if (null == mode) throw new IllegalArgumentException("Invalid mode");
-        // TODO: Add validation on earliestKeyTime
+        if (earliestKeyTime < 0) throw new IllegalArgumentException("Invalid earliest key time");
         if (null == storagePath) throw new IllegalArgumentException("Invalid storage path");
         if (null == persistenceClient) throw new IllegalArgumentException("Invalid persistence client");
         if (null == backendClient) throw new IllegalArgumentException("Invalid backend client");
@@ -139,7 +139,6 @@ public final class BitcoinWalletManager implements WalletManager, CoreBitcoinWal
         listenerExecutor.execute(() -> {
             BitcoinWalletManagerListener l = listener.get();
             if (l != null) {
-                // TODO: Get wallet using wid
                 Wallet wallet = new BitcoinWallet(coreWallet, this);
                 Amount amount = new Amount(satoshi, Bitcoin.SATOSHI);
                 l.handleWalletEvent(this, wallet, new BalanceUpdatedWalletEvent(amount));

@@ -3,6 +3,7 @@ package com.breadwallet.crypto.api.factories;
 import com.breadwallet.crypto.api.Account;
 import com.breadwallet.crypto.api.Network;
 import com.breadwallet.crypto.api.WalletManager;
+import com.breadwallet.crypto.api.WalletManager.Mode;
 import com.breadwallet.crypto.api.bitcoin.BitcoinBackendClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinPersistenceClient;
 import com.breadwallet.crypto.api.bitcoin.BitcoinWalletManagerListener;
@@ -13,7 +14,7 @@ public interface WalletManagerFactory {
 
     WalletManager createBitcoinWalletManager(Account account,
                                              Network network,
-                                             WalletManager.Mode mode,
+                                             Mode mode,
                                              int earliestKeyTime,
                                              String storagePath,
                                              BitcoinPersistenceClient persistenceClient,
