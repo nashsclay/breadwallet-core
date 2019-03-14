@@ -117,6 +117,10 @@ jni_hdr_crypto:	FORCE
 	  for class in *.class; do \
 	      javah -jni -d $(DIR)/$(JNI_SDIR) -classpath $(DIR)/build com.breadwallet.crypto.core.jni.$${class%%.class}; \
 	  done)
+	@(cd $(JNI_SDIR); \
+	  rm -f .h \
+			com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWallet.h \
+			com_breadwallet_crypto_core_bitcoin_jni_CoreBitcoinWalletManagerClient.h)
 
 
 jni_hdr: java_comp jni_hdr_crypto
