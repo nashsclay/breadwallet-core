@@ -9,6 +9,11 @@ public class SyncEndedWalletManagerEvent implements WalletManagerEvent {
     }
 
     @Override
+    public <T> T accept(WalletManagerEventVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return String.format("SyncEndedWalletManagerEvent(err: %s)", error);
     }

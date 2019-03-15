@@ -15,6 +15,11 @@ public class BalanceUpdatedWalletEvent implements WalletEvent {
     }
 
     @Override
+    public <T> T accept(WalletEventVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return String.format("BalanceUpdatedWalletEvent(amount = %s)", amount);
     }

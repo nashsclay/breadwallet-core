@@ -21,6 +21,11 @@ public class ChangedWalletManagerEvent implements WalletManagerEvent {
     }
 
     @Override
+    public <T> T accept(WalletManagerEventVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return String.format("ChangedWalletManagerEvent(old: %s, new: %s)", oldState, newState);
     }
