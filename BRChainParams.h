@@ -49,8 +49,7 @@ typedef struct {
 } BRChainParams;
 
 static const char *BRMainNetDNSSeeds[] = {
-    "seed.breadwallet.com.", "seed.bitcoin.sipa.be.", "dnsseed.bluematt.me.", "dnsseed.bitcoin.dashjr.org.",
-    "seed.bitcoinstats.com.", "bitseed.xf2.org.", "seed.bitcoin.jonasschnelli.ch.", NULL
+    "79.137.39.240", "51.38.115.250", "54.38.53.207", "178.128.111.9", "159.89.168.255", "159.89.171.67", NULL
 };
 
 static const char *BRTestNetDNSSeeds[] = {
@@ -76,8 +75,8 @@ static const BRCheckPoint BRMainNetCheckpoints[] = {
     { 182750, uint256("1c84752e501b27cdf561e1e96d0c15dc15925462845a62ee508ae98bb089216d"), 1550827881, 0x1e02f881 },
     { 182751, uint256("268f8621be92a8a09d7fa10e8ddf62e4a275230a8212c718dad1d9bc98669271"), 1550827888, 0x1e0fffff },
     { 199000, uint256("dc78cfb171a2ca24e235df6ec716d5a052dc89705c5af0393fad359b12753390"), 1551900379, 0x1919db4b },
-    { 205500, uint256("d93ed4534386fadd560b979f4476abf150a4b7b5515ab8b8e2ef878af9022a09"), 1553337207, 0x1920bf7a }
-    //{ ,
+    { 220500, uint256("d93ed4534386fadd560b979f4476abf150a4b7b5515ab8b8e2ef878af9022a09"), 1553337207, 0x1920bf7a }
+    //{ 250000,
 };
 
 static const BRCheckPoint BRTestNetCheckpoints[] = {
